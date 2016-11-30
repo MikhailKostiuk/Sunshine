@@ -3,4 +3,9 @@
 
     <!-- Menu label to fetch updated weather info from the server -->
     <string name="action_refresh">Refresh</string>
+    <!-- Menu label for settings -->
+    <string name="action_settings">Settings</string>
+    
+    <string name="title_activity_detail">Detail</string>
+    <string name="title_activity_settings">Settings</string>
 </resources>
