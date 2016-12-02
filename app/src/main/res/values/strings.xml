@@ -7,6 +7,12 @@
     <!-- Menu label for settings -->
     <string name="action_settings">Settings</string>
 
+    <!-- Menu label for map location -->
+    <string name="action_map">Map Location</string>
+
+    <!-- Menu label for action share -->
+    <string name="action_share">Share</string>
+
     <!-- Label for the location preference -->
     <string name="pref_location_label">Location</string>
 
