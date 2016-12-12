@@ -1,7 +1,10 @@
 package com.example.sunshine.data;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
 import java.util.Map;
@@ -24,6 +27,12 @@ public class TestUtilities extends AndroidTestCase {
                     "' did not match the expected value '" +
                     expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
         }
+    }
+
+    static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
+        assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
+        validateCurrentRecord(error, valueCursor, expectedValues);
+        valueCursor.close();
     }
 
     /*
@@ -54,5 +63,20 @@ public class TestUtilities extends AndroidTestCase {
         testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
 
         return testValues;
+    }
+
+    static long insertNorthPoleLocationValues(Context context) {
+        // insert test records into the database
+        WeatherDbHelper dbHelper = new WeatherDbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues testValues = createNorthPoleLocationValues();
+
+        long locationRowId;
+        locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
+
+        // Verify we got a row back.
+        assertTrue("Error: Failure to insert North Pole Location Values", locationRowId != -1);
+
+        return locationRowId;
     }
 }
