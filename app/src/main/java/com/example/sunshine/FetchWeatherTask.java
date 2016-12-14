@@ -1,13 +1,18 @@
 package com.example.sunshine;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+
+import com.example.sunshine.data.WeatherContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +37,53 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String []> {
     public FetchWeatherTask(Context context, ArrayAdapter<String> forecastAdapter) {
         mContext = context;
         mForecastAdapter = forecastAdapter;
+    }
+
+    /**
+     * Helper method to handle insertion of a new location in the weather database.
+     *
+     * @param locationSetting The location string used to request updates from the server.
+     * @param cityName A human-readable city name.
+     * @param lat The latitude of the city.
+     * @param lon The longitude of the city.
+     * @return The row ID of the added location.
+     */
+    long addLocation(String locationSetting, String cityName, double lat, double lon){
+
+        long locationID;
+
+        // First, check if the location with this city name exists in the db.
+        Cursor locationCursor = mContext.getContentResolver().query(
+                WeatherContract.LocationEntry.CONTENT_URI,
+                new String[]{WeatherContract.LocationEntry._ID},
+                WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
+                new String[]{locationSetting},
+                null);
+
+        if (locationCursor.moveToFirst()) {
+            int locationIdIndex = locationCursor.getColumnIndex(WeatherContract.LocationEntry._ID);
+            locationID = locationCursor.getLong(locationIdIndex);
+        } else {
+
+            // Insert location data into the database.
+            ContentValues locationValues = new ContentValues();
+
+            locationValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING,
+                    locationSetting);
+            locationValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
+            locationValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, lat);
+            locationValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, lon);
+
+            Uri insertedUri = mContext.getContentResolver().insert(
+                    WeatherContract.LocationEntry.CONTENT_URI,
+                    locationValues);
+
+            // The resulting URI contains the ID for the row.  Extract the locationId from the Uri.
+            locationID = ContentUris.parseId(insertedUri);
+        }
+        locationCursor.close();
+
+        return locationID;
     }
 
     /**
