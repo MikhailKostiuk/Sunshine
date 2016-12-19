@@ -124,7 +124,7 @@ public class WeatherContract {
 
             return CONTENT_URI.buildUpon()
                     .appendPath(locationSettings)
-                    .appendPath(Long.toString(normalizeDate(date)))
+                    .appendQueryParameter(COLUMN_DATE, Long.toString(normalizeDate(date)))
                     .build();
         }
 
