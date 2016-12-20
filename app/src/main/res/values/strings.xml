@@ -1,5 +1,10 @@
-<resources>
+<resources
+    xmlns:xliff="http://schemas.android.com/apk/res-auto">
+
     <string name="app_name">Sunshine</string>
+
+    <string name="title_activity_detail">Detail</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- Menu label to fetch updated weather info from the server -->
     <string name="action_refresh">Refresh</string>
@@ -39,7 +44,14 @@
 
     <!-- Value in SharedPreferences for imperial temperature unit option -->
     <string name="pref_units_imperial" translatable="false">imperial</string>
-    
-    <string name="title_activity_detail">Detail</string>
-    <string name="title_activity_settings">Settings</string>
+
+    <!-- Date label when displaying today's weather forecast -->
+    <string name="today">Today</string>
+
+    <!-- Date label when displaying tomorrow's weather forecast -->
+    <string name="tomorrow">Tomorrow</string>
+
+    <!-- Date format for displaying day of week and date (i.e. Mon Jun 1) -->
+    <string name="format_full_friendly_date"><xliff:g id="day">%1$s</xliff:g>, <xliff:g id="date">%2$s</xliff:g></string>
+
 </resources>
