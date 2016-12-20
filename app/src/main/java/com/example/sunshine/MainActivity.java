@@ -13,9 +13,13 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String FORECASTFRAGMENT_TAG = "FFTAG";
+
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mLocation = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -35,7 +39,25 @@ public class MainActivity extends AppCompatActivity {
 
             // Add the fragment to the 'forecast_fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.forecast_fragment_container, forecastFragment).commit();
+                    .add(R.id.forecast_fragment_container, forecastFragment, FORECASTFRAGMENT_TAG)
+                    .commit();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String location = Utility.getPreferredLocation(this);
+
+        if (location != null && !location.equals(mLocation)) {
+            ForecastFragment forecastFragment =
+                    (ForecastFragment) getSupportFragmentManager()
+                            .findFragmentByTag(FORECASTFRAGMENT_TAG);
+            if (forecastFragment != null) {
+                forecastFragment.onLocationChanged();
+            }
+            mLocation = location;
         }
     }
 
