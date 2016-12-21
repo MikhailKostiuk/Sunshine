@@ -125,4 +125,36 @@ public class Utility {
         String monthDayString = monthDayFormat.format(dateInMillis);
         return monthDayString;
     }
+
+    public static String getFormattedWind(Context context, float windSpeed, float degrees) {
+
+        int windFormat;
+        if (Utility.isMetric(context)) {
+            windFormat = R.string.format_wind_kmh;
+        } else {
+            windFormat = R.string.format_wind_mph;
+            windSpeed = .621371192237334f * windSpeed;
+        }
+
+        // From wind direction in degrees, determine compass direction as a string (e.g NW)
+        String direction = "Unknown";
+        if (degrees >= 337.5 || degrees < 22.5) {
+            direction = "North";
+        } else if (degrees >= 22.5 && degrees < 67.5) {
+            direction = "Northeast";
+        } else if (degrees >= 67.5 && degrees < 112.5) {
+            direction = "East";
+        } else if (degrees >= 112.5 && degrees < 157.5) {
+            direction = "Southeast";
+        } else if (degrees >= 157.5 && degrees < 202.5) {
+            direction = "South";
+        } else if (degrees >= 202.5 && degrees < 247.5) {
+            direction = "Southwest";
+        } else if (degrees >= 247.5 && degrees < 292.5) {
+            direction = "West";
+        } else if (degrees >= 292.5 && degrees < 337.5) {
+            direction = "Northwest";
+        }
+        return String.format(context.getString(windFormat), windSpeed, direction);
+    }
 }
