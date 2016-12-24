@@ -15,7 +15,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
-        if (findViewById(R.id.detail_fragment_container) != null) {
+        if (findViewById(R.id.weather_detail_container) != null) {
 
             // However, if we're being restored from a previous state,
             // then we don't need to do anything and should return or else
@@ -29,7 +29,7 @@ public class DetailActivity extends AppCompatActivity {
 
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.detail_fragment_container, detailFragment).commit();
+                    .add(R.id.weather_detail_container, detailFragment).commit();
         }
     }
 
