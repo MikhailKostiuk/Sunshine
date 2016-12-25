@@ -13,23 +13,19 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        // Check that the activity is using the layout version with
-        // the fragment_container FrameLayout
-        if (findViewById(R.id.weather_detail_container) != null) {
+        if (savedInstanceState == null) {
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
 
-            // However, if we're being restored from a previous state,
-            // then we don't need to do anything and should return or else
-            // we could end up with overlapping fragments.
-            if (savedInstanceState != null) {
-                return;
-            }
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(DetailFragment.DETAIL_URI, getIntent().getData());
 
-            // Create a new Fragment to be placed in the activity layout
-            DetailFragment detailFragment = new DetailFragment();
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(arguments);
 
-            // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.weather_detail_container, detailFragment).commit();
+                    .add(R.id.weather_detail_container, fragment)
+                    .commit();
         }
     }
 
